@@ -9,9 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Note {
 
     @Id
-    private String id;
-    private String title;
-    private String description;
+    private final String id;
+    private final String title;
+    private final String description;
 
     public Note(String id, String title, String description){
         this.id = id;

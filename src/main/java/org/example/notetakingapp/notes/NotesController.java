@@ -1,8 +1,10 @@
 package org.example.notetakingapp.notes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
+import org.example.notetakingapp.notes.dto.BaseNoteDto;
+import org.example.notetakingapp.notes.dto.NoteWithIdDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +19,13 @@ public class NotesController {
     }
 
     @GetMapping
-    public List<NoteDto> getNotes(){
+    public List<NoteWithIdDto> getNotes(){
         return notesService.getNotes();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public NoteWithIdDto createNote(@RequestBody BaseNoteDto baseNoteDto) throws NoTitleException {
+        return notesService.createNote(baseNoteDto);
     }
 }
