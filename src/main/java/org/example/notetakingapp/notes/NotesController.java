@@ -1,6 +1,8 @@
 package org.example.notetakingapp.notes;
 
+import org.example.notetakingapp.errorhandling.exceptions.IncorrectSearchParametersException;
 import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
+import org.example.notetakingapp.errorhandling.exceptions.NoteNotFoundException;
 import org.example.notetakingapp.notes.dto.BaseNoteDto;
 import org.example.notetakingapp.notes.dto.NoteWithIdDto;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,9 @@ public class NotesController {
     }
 
     @GetMapping
-    public List<NoteWithIdDto> getNotes(){
-        return notesService.getNotes();
+    @ResponseStatus(HttpStatus.OK)
+    public List<NoteWithIdDto> getNotes(@RequestParam(required = false) String id, @RequestParam(required = false) String title)  throws IncorrectSearchParametersException, NoteNotFoundException {
+        return notesService.getNotes(id, title);
     }
 
     @PostMapping

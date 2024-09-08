@@ -1,6 +1,8 @@
 package org.example.notetakingapp.notes;
 
+import org.example.notetakingapp.errorhandling.exceptions.IncorrectSearchParametersException;
 import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
+import org.example.notetakingapp.errorhandling.exceptions.NoteNotFoundException;
 import org.example.notetakingapp.notes.dto.BaseNoteDto;
 import org.example.notetakingapp.notes.dto.NoteWithIdDto;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,26 @@ public class NotesService {
         this.notesRepository = notesRepository;
     }
 
-    public List<NoteWithIdDto> getNotes(){
-        return notesRepository.findAll()
+    public List<NoteWithIdDto> getNotes(String id, String title) throws IncorrectSearchParametersException, NoteNotFoundException {
+        if(id != null && title != null){
+            throw new IncorrectSearchParametersException();
+        }
+
+        List<Note> result;
+        if(id != null){
+            Note note = notesRepository.findById(id).orElseThrow(NoteNotFoundException::new);
+            result = List.of(note);
+        } else if(title != null){
+            System.out.println(title);
+            result = notesRepository.findByTitle(title);
+            if(result.isEmpty()){
+                throw new NoteNotFoundException();
+            }
+        } else {
+            result = notesRepository.findAll();
+        }
+
+        return result
                 .stream()
                 .map(note -> new NoteWithIdDto(note.getId(), note.getTitle(), note.getDescription()))
                 .toList();
