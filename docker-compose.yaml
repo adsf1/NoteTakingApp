@@ -1,0 +1,27 @@
+services:
+    note_taking_app_be:
+      build:
+        context: .
+      container_name: note_taking_app_be
+      ports:
+        - "8080:8080"
+      working_dir: /app
+      environment:
+        SPRING_DATA_MONGODB_URI: mongodb://root:password@mongo_db:27017/note-taking-app?authSource=admin
+      depends_on:
+        - mongo_db
+
+    mongo_db:
+      image: mongo:7.0
+      container_name: mongo_db
+      ports:
+        - "27017:27017"
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=password
+        - MONGO_INITDB_DATABASE=note-taking-app
+      volumes:
+        - db:/data/db
+
+volumes:
+  db:
