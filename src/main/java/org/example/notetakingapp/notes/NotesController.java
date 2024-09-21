@@ -1,6 +1,7 @@
 package org.example.notetakingapp.notes;
 
 import org.example.notetakingapp.errorhandling.exceptions.IncorrectSearchParametersException;
+import org.example.notetakingapp.errorhandling.exceptions.MissingIdException;
 import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
 import org.example.notetakingapp.errorhandling.exceptions.NoteNotFoundException;
 import org.example.notetakingapp.notes.dto.BaseNoteDto;
@@ -30,5 +31,11 @@ public class NotesController {
     @ResponseStatus(HttpStatus.CREATED)
     public NoteWithIdDto createNote(@RequestBody BaseNoteDto baseNoteDto) throws NoTitleException {
         return notesService.createNote(baseNoteDto);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public NoteWithIdDto updateNote(@PathVariable String id, @RequestBody BaseNoteDto baseNoteDto) throws MissingIdException, NoteNotFoundException {
+        return notesService.updateNote(id, baseNoteDto);
     }
 }

@@ -1,6 +1,7 @@
 package org.example.notetakingapp.notes;
 
 import org.example.notetakingapp.errorhandling.exceptions.IncorrectSearchParametersException;
+import org.example.notetakingapp.errorhandling.exceptions.MissingIdException;
 import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
 import org.example.notetakingapp.errorhandling.exceptions.NoteNotFoundException;
 import org.example.notetakingapp.notes.dto.BaseNoteDto;
@@ -49,6 +50,25 @@ public class NotesService {
         }
 
         Note note = new Note(null, baseNoteDto.getTitle(), baseNoteDto.getDescription());
+        Note savedNote = notesRepository.save(note);
+
+        return new NoteWithIdDto(savedNote.getId(), savedNote.getTitle(), savedNote.getDescription());
+    }
+
+    public NoteWithIdDto updateNote(String id, BaseNoteDto baseNoteDto) throws MissingIdException, NoteNotFoundException {
+        if(id == null || id.isBlank()){
+            throw new MissingIdException();
+        }
+
+        Note note = notesRepository.findById(id).orElseThrow(NoteNotFoundException::new);
+
+        if(baseNoteDto.getTitle() != null && !baseNoteDto.getTitle().isBlank()){
+            note.setTitle(baseNoteDto.getTitle());
+        }
+        if(baseNoteDto.getDescription() != null){
+            note.setDescription(baseNoteDto.getDescription());
+        }
+
         Note savedNote = notesRepository.save(note);
 
         return new NoteWithIdDto(savedNote.getId(), savedNote.getTitle(), savedNote.getDescription());

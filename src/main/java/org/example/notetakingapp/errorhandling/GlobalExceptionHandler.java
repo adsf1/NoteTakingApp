@@ -1,6 +1,7 @@
 package org.example.notetakingapp.errorhandling;
 
 import org.example.notetakingapp.errorhandling.exceptions.IncorrectSearchParametersException;
+import org.example.notetakingapp.errorhandling.exceptions.MissingIdException;
 import org.example.notetakingapp.errorhandling.exceptions.NoTitleException;
 import org.example.notetakingapp.errorhandling.exceptions.NoteNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoteNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNoteNotFoundException(NoteNotFoundException ex){
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(MissingIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleMissingIdException(MissingIdException ex){
         return ex.getMessage();
     }
 }
