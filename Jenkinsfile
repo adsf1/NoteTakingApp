@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+        DOCKER_COMPOSE_FILE = 'be/docker-compose.yml'
         // APP_CONTAINER = 'note_taking_app_be'
     }
 
@@ -19,7 +19,9 @@ pipeline {
 
         stage('Build App & Test') {
             steps {
-                sh 'mvn clean package'
+                dir('be'){
+                    sh 'mvn clean package'
+                }
             }
         }
 
