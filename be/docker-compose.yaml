@@ -1,7 +1,7 @@
 services:
     note_taking_app_be:
       build:
-        context: .
+        context: ..
       container_name: note_taking_app_be
       ports:
         - "8081:8080"

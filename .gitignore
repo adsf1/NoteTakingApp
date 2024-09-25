@@ -1,6 +1,6 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!be/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -14,6 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
+be/.idea
 .idea
 *.iws
 *.iml
@@ -31,3 +32,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/fe/node_modules/
+/fe/.angular
