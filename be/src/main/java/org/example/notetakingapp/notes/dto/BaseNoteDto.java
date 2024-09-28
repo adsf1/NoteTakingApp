@@ -1,15 +1,15 @@
 package org.example.notetakingapp.notes.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseNoteDto {
 
-    private final String title;
-    private final String description;
+    private String title;
+    private String description;
 
-    public BaseNoteDto(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 }

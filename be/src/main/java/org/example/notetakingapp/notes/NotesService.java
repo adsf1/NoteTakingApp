@@ -73,4 +73,18 @@ public class NotesService {
 
         return new NoteWithIdDto(savedNote.getId(), savedNote.getTitle(), savedNote.getDescription());
     }
+
+    public void deleteNote(String id) throws MissingIdException, NoteNotFoundException {
+        System.out.println("id: " + id);
+
+        if(id == null || id.isBlank()){
+            throw new MissingIdException();
+        }
+
+        if(!notesRepository.existsById(id)){
+            throw new NoteNotFoundException();
+        }
+
+        notesRepository.deleteById(id);
+    }
 }

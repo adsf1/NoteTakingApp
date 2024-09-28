@@ -23,7 +23,9 @@ public class NotesController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<NoteWithIdDto> getNotes(@RequestParam(required = false) String id, @RequestParam(required = false) String title)  throws IncorrectSearchParametersException, NoteNotFoundException {
+    public List<NoteWithIdDto> getNotes(@RequestParam(name = "id", required = false) String id,
+                                        @RequestParam(name = "title", required = false) String title)
+            throws IncorrectSearchParametersException, NoteNotFoundException {
         return notesService.getNotes(id, title);
     }
 
@@ -35,7 +37,14 @@ public class NotesController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public NoteWithIdDto updateNote(@PathVariable String id, @RequestBody BaseNoteDto baseNoteDto) throws MissingIdException, NoteNotFoundException {
+    public NoteWithIdDto updateNote(@PathVariable("id") String id, @RequestBody BaseNoteDto baseNoteDto)
+            throws MissingIdException, NoteNotFoundException {
         return notesService.updateNote(id, baseNoteDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNote(@PathVariable("id") String id) throws MissingIdException, NoteNotFoundException {
+        notesService.deleteNote(id);
     }
 }

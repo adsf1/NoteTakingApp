@@ -108,7 +108,7 @@ class NoteTakingAppApplicationTests {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isEqualTo("Note  not found!");
+        assertThat(response.getBody()).isEqualTo("Note not found!");
     }
 
     @Test
@@ -146,7 +146,7 @@ class NoteTakingAppApplicationTests {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isEqualTo("Note  not found!");
+        assertThat(response.getBody()).isEqualTo("Note not found!");
     }
 
     @Test
@@ -231,6 +231,27 @@ class NoteTakingAppApplicationTests {
         assertThat(response.getBody().getId()).isNotNull();
         assertThat(response.getBody().getTitle()).isEqualTo("Note title");
         assertThat(response.getBody().getDescription()).isEqualTo("Note description");
+    }
+
+    // TODO: Update Note tests
+
+    @Test
+    void deleteNote_noteDoesntExist_returnsError(){
+        addNoteToDatabse();
+
+        ResponseEntity<String> response = restTemplate.exchange(baseUrl + "/99", HttpMethod.DELETE, null, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Note not found!");
+    }
+
+    @Test
+    void deleteNote_validId_deletesNote(){
+        Note newNote = addNoteToDatabse();
+
+        ResponseEntity<String> response = restTemplate.exchange(baseUrl + "/" +  newNote.getId(), HttpMethod.DELETE, null, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     private Note addNoteToDatabse(){
