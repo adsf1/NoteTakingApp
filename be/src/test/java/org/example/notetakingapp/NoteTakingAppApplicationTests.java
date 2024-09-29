@@ -233,7 +233,59 @@ class NoteTakingAppApplicationTests {
         assertThat(response.getBody().getDescription()).isEqualTo("Note description");
     }
 
-    // TODO: Update Note tests
+    @Test
+    void updateNote_noteDoesntExist_returnsError(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>("{}", headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(baseUrl + "/0", HttpMethod.PUT, request, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Note not found!");
+    }
+
+    @Test
+    void updateNote_blankTitle_doesntUpdateTitle(){
+        Note newNote = addNoteToDatabase();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        BaseNoteDto note = new BaseNoteDto("", "New Note description");
+        HttpEntity<BaseNoteDto> request = new HttpEntity<>(note, headers);
+
+        ResponseEntity<NoteWithIdDto> response = restTemplate.exchange(baseUrl + "/" + newNote.getId(),
+                HttpMethod.PUT, request, NoteWithIdDto.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(newNote.getId());
+        assertThat(response.getBody().getTitle()).isEqualTo(newNote.getTitle());
+        assertThat(response.getBody().getDescription()).isEqualTo(note.getDescription());
+    }
+
+    @Test
+    void updateNote_validTitleAndDescription_updatesNote(){
+        Note newNote = addNoteToDatabase();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        BaseNoteDto note = new BaseNoteDto("New Note Tile", "");
+        HttpEntity<BaseNoteDto> request = new HttpEntity<>(note, headers);
+
+        ResponseEntity<NoteWithIdDto> response = restTemplate.exchange(baseUrl + "/" + newNote.getId(),
+                HttpMethod.PUT,
+
+                request, NoteWithIdDto.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(newNote.getId());
+        assertThat(response.getBody().getTitle()).isEqualTo(note.getTitle());
+        assertThat(response.getBody().getDescription()).isEqualTo(note.getDescription());
+    }
 
     @Test
     void deleteNote_noteDoesntExist_returnsError(){
