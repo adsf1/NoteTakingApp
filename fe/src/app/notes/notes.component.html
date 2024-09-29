@@ -1,21 +1,47 @@
 <div class="notes-group">
     <div class="notes-content">
+        <div class="title-panel">
+            <h2>Notes</h2>
+            <button (click)="toggleCreateForm()">{{ showForm ? 'Cancel' : 'Create' }}</button>
+        </div>
         @if(error){
             <div class="error-message">
                 Error: {{ error }}    
             </div>
         }
         @else {
-            @for (note of notes; track note.id) {
-                <li>
-                    <div class="data-panel">
-                        <h4>{{ note.title }}</h4>
-                        <p>{{ note.description }}</p>
+            @if(showForm){
+                <form (ngSubmit)="uploadNote()" class="note-form" [formGroup]="noteForm">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input id="title" formControlName="title">
+                        <div *ngIf="noteForm.get('title')?.invalid && (noteForm.get('title')?.dirty || noteForm.get('title')?.touched)" class="error">
+                            <div *ngIf="noteForm.get('title')?.errors?.['required']">Title is required.</div>
+                            <div *ngIf="noteForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters long.</div>
+                        </div>
                     </div>
-                    <div class="actions-panel">
-                        <button (click)="deleteNote(note.id)">Delete</button>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input id="description" formControlName="description">
                     </div>
-                </li>
+
+                    <button type="submit" [disabled]="!noteForm.valid">{{ isEdit ? 'Save' : 'Create' }}</button>
+                </form>
+            }
+            @else {
+                @for (note of notes; track note.id) {
+                    <li>
+                        <div class="data-panel">
+                            <h4>{{ note.title }}</h4>
+                            <p>{{ note.description }}</p>
+                        </div>
+                        <div class="actions-panel">
+                            <button (click)="openEditForm(note.id)">Edit</button>
+                            <button (click)="deleteNote(note.id)">Delete</button>
+                        </div>
+                    </li>
+                }
             }
         }
     </div>
