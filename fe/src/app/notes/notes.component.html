@@ -1,0 +1,22 @@
+<div class="notes-group">
+    <div class="notes-content">
+        @if(error){
+            <div class="error-message">
+                Error: {{ error }}    
+            </div>
+        }
+        @else {
+            @for (note of notes; track note.id) {
+                <li>
+                    <div class="data-panel">
+                        <h4>{{ note.title }}</h4>
+                        <p>{{ note.description }}</p>
+                    </div>
+                    <div class="actions-panel">
+                        <button (click)="deleteNote(note.id)">Delete</button>
+                    </div>
+                </li>
+            }
+        }
+    </div>
+</div>
